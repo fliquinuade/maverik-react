@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # Servicio para desarrollo
+  maverik-ui-dev:
+    build:
+      context: .
+      dockerfile: deployments/Dockerfile
+      target: development
+    container_name: maverik-ui-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
+      - VITE_BASE_URL=${VITE_BASE_URL:-}
+    command: npm run dev -- --host 0.0.0.0
+    profiles:
+      - dev
+
+  # Servicio para producción
+  maverik-ui-prod:
+    build:
+      context: .
+      dockerfile: deployments/Dockerfile
+      target: production
+    container_name: maverik-ui-prod
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
+      - VITE_BASE_URL=${VITE_BASE_URL:-}
+    profiles:
+      - prod
+
+  # Servicio adicional para preview (build + preview)
+  maverik-ui-preview:
+    build:
+      context: .
+      dockerfile: deployments/Dockerfile
+      target: build
+    container_name: maverik-ui-preview
+    ports:
+      - "4173:4173"
+    command: npm run preview -- --host 0.0.0.0
+    environment:
+      - VITE_API_URL=${VITE_API_URL:-http://localhost:8000/api}
+      - VITE_BASE_URL=${VITE_BASE_URL:-}
+    profiles:
+      - preview
