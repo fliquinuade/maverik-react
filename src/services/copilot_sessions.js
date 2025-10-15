@@ -43,7 +43,6 @@ export const sendInput = async ({
 
     try {
         const response = await api.post(`/copilot/sessions/${sesion_asesoria_id}`, data);
-        console.log(response);
         return response.data;
     } catch (error) {
         handleError(error);

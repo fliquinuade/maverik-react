@@ -71,6 +71,8 @@ function ChatComponent() {
         setCurrentTitle(titulo_chat);
         setText(response.input);
         setMessage({"role": "system", "content": response.output});
+        console.log(response);
+
         setTimeout(() => {
           setText('');
         }, 2);
@@ -112,6 +114,7 @@ function ChatComponent() {
         sesion_asesoria_id: session_id, 
         input: text, 
       });
+      console.log(response);
 
       setMessage({"role": "system", "content": response.output});
       setTimeout(() => {
@@ -361,6 +364,20 @@ function ChatComponent() {
             </form>
             </Row>
           </Container>
+          <div className='response-container'>
+            {isResponseLoading && (
+              <div className='loading'>
+                <BiSend size={50} className='send-icon' />
+                <span>Procesando...</span>
+              </div>
+            )}
+            {!isResponseLoading && (message && (
+              <div className='response'>
+                <BiSend size={50} className='send-icon' />
+                <span>{message.content}</span>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
       </Container>
